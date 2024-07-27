@@ -48,6 +48,8 @@ class VowelCounter:
             print("Could not download NLTK 'words'")
             nltk_ok = False
 
+    # check character for a vowel
+    # returns 0 for no vowel, -1 for a vowel
     def check_for_vowel(self, character):
         # if character is in list of vowels
         vowel_index = self.ordinary_vowels.find(character)
@@ -56,6 +58,8 @@ class VowelCounter:
             # if the character
             self.vowel_occurrences_count[vowel_index] = self.vowel_occurrences_count[vowel_index] + 1
             # increment that vowel's occurrence counter
+            return -1
+        return 0
 
         # https://www.merriam-webster.com/grammar/why-y-is-sometimes-a-vowel-usage
         #
@@ -66,32 +70,35 @@ class VowelCounter:
     Check for presence of y-as-vowel.
     One character-at-a-time, but...
     ... submit whole words, because words and syllables are inspected.
+    Returns 0 for no y, -1 for a y vowel, -2 for a y but not a vowel
     '''
     def check_for_y_vowel(self, word, index_within_word : int):
         character = word[index_within_word]
         if character != 'y':
-            return  # if not a 'y', don' bother
+            return 0 # if not a 'y', don't bother
 
         if re.search('['+ self.ordinary_vowels + ']', word) is False:
             self.y_vowel_occurrences[0] = self.y_vowel_occurrences[0] + 1
-            return
+            return -1
         # if this is a word but has no 'aeiou', then this 'y' must be a vowel
         # (assuming not an acronym or something wacky)
 
         if index_within_word == len(word)-1:
             self.y_vowel_occurrences[0] = self.y_vowel_occurrences[0] + 1
-            return
+            return -1
         # if this is a 'y' at the end of the word, this y must be a vowel
         # (could be the end of a diphthong)
 
         if self.nltk_ok is True:     # only try this if the NLTK corpus payload downloaded ok
             if index_within_word == len(self.LP.onset(word)):
                 self.y_vowel_occurrences[0] = self.y_vowel_occurrences[0] + 1
+                return -1
+
         # bit sus: 'y' in syllable nucleus can be a vowel;
         # here saying, if first character after a word's onset
         # (i.e. first in nucleus) is a 'y' then tis a vowel (which is sus, but nvmd)
         # this code only working for monosyllablic words at present
-
+        return -2
         # on the fence regarding y-in-a-diphthong..... (TBA)
 
         # (i) no other vowel in syllable, (ii) at end of word, (iii) in middle/nucleus of syllable
@@ -104,7 +111,7 @@ class VowelCounter:
         # words_split
         # syllables_split
         # https://stackoverflow.com/a/18449491
-        return
+
 
     # from itertools import chain
     # def flatten_syllables(syllable_list):
