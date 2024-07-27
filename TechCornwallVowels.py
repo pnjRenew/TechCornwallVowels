@@ -13,8 +13,8 @@ initialisation
 vowel_occurrences_count = [0] * 5
 #ordinary_vowels = ['a', 'e', 'i', 'o', 'u']
 ordinary_vowels = "aeiou"
-y_vowel_occurrences = [0]   # not quite sure why this array is necessary https://stackoverflow.com/q/370357
-strTechCornwall = "Tech Cornwall Career Pathway"
+y_vowel_occurrences = [0]       # https://stackoverflow.com/q/74412503
+strTechCornwall = "Tech Cornwall Career Pathways"
 nltk_ok = True
 
 '''
@@ -126,8 +126,12 @@ def print_hi(name):
     print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
 
 
-def main_vowel_count():
-    print(strTechCornwall)                          # print the string
+def main_vowel_count(strTechCornwall):
+    print(strTechCornwall)
+    user_input = input("Type in text to test, or press ENTER to count vowels in text above :")
+    if user_input != "":
+        strTechCornwall = user_input
+    # print the string
     [check_for_vowel(x) for x in re.sub('[!? #@£$.]','',strTechCornwall)]
     # check every character to see if vowel (remove punctuation with regex)
     if nltk_ok:
@@ -145,7 +149,7 @@ def main_vowel_count():
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-    main_vowel_count()
+    #print_hi('PyCharm')
+    main_vowel_count(strTechCornwall)
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
