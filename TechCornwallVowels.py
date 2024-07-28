@@ -140,6 +140,32 @@ def main_vowel_count(strTechCornwall):
 
     vowel_counter = VowelCounter(strTechCornwall)
 
+    try:
+        nltk.download('punkt')
+        vowel_counter.SSP = SyllableTokenizer()
+        vowel_counter.split = vowel_counter.SSP.tokenize(strTechCornwall)
+    except:
+        print("Could not download punkt")
+        vowel_counter.nltk_ok = False
+        # punkt not yet actually needed in this code
+        # (alternative syllable splitting method)
+
+
+
+    try:
+        nltk.download('words')  # try downloading corpus
+        # might crash if 'words' not downloaded
+        vowel_counter.words_split = nltk.word_tokenize(strTechCornwall, language='english')
+        # get the individual words
+        vowel_counter.LP = LegalitySyllableTokenizer(words.words())
+        # ready the NLTK tokenizer using downloaded using the corpus called 'words'
+        syllables_split = [vowel_counter.LP.tokenize(word) for word in vowel_counter.words_split]
+        # get the individual syllables of this string
+        # https://www.nltk.org/api/nltk.tokenize.legality_principle.html
+    except:
+        print("Could not download NLTK 'words'")
+        vowel_counter.nltk_ok = False
+
     [vowel_counter.check_for_vowel(x) for x in re.sub('[!? #@£$.]','',strTechCornwall)]
     # check every character to see if vowel (remove punctuation with regex)
     if vowel_counter.nltk_ok:
