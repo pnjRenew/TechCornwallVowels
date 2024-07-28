@@ -1,5 +1,6 @@
 '''
-A class to count the vowels in a string
+A class to count the vowels in a string.
+If download works, can also search for y as a vowel.
 P Jenkin 27/7/24
 '''
 
@@ -19,34 +20,7 @@ class VowelCounter:
         self.y_vowel_occurrences = [0]  # https://stackoverflow.com/q/74412503
         self.strTechCornwall = input_string
         self.nltk_ok = True
-
-        '''
-        Natural Language ToolKit corpus d'require a download
-        '''
-
-        try:
-            nltk.download('punkt')
-            self.SSP = SyllableTokenizer()
-            self.split = SSP.tokenize(strTechCornwall)
-        except:
-            print("Could not download punkt")
-            self.nltk_ok = False
-            # punkt not yet actually needed in this code
-            # (alternative syllable splitting method)
-
-        try:
-            nltk.download('words')  # try downloading corpus
-            # might crash if 'words' not downloaded
-            self.words_split = nltk.word_tokenize(strTechCornwall, language='english')
-            # get the individual words
-            self.LP = LegalitySyllableTokenizer(words.words())
-            # ready the NLTK tokenizer using downloaded using the corpus called 'words'
-            syllables_split = [self.LP.tokenize(word) for word in self.words_split]
-            # get the individual syllables of this string
-            # https://www.nltk.org/api/nltk.tokenize.legality_principle.html
-        except:
-            print("Could not download NLTK 'words'")
-            nltk_ok = False
+        # NLTK download does not seem to work in __init__
 
     # check character for a vowel
     # returns 0 for no vowel, -1 for a vowel
